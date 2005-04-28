@@ -1,145 +1,60 @@
-0.01 27. Apr 2005
-   - Split from the parent Apache::AuthenNTLM
-   - Moved to the Apache2::AuthenNTLM namespace
-   - All mp1/mp2 shared code has been removed
-   - All mp1/mp2 shared code replace with mp2 code
-   - Fixed all changes to work with mp2 API renaming changes
+Revision history for Perl extension Authen::Smb.
 
----- End of Apache::AuthenNTLM
+0.1  Wed Mar 11 10:26:43 1998
+	- original version; Not particularly well documented, no fancy
+	  OO features.
 
-2.10  07. Feb 2005
-   - Fixed $VERSION... 
+0.2  Thu Jul 30 20:46:00 1998
+	- no real changes, some minor documentation updates.  First CPAN
+	  release.
 
-2.09  07. Feb 2005
-   - Added notes about KeepAlive Off in httpd.conf file
-   - Added patch from Sergey Svishchev that fixes and issue where
-     each request after the first request on a keep-alive
-     connection used POST data as headers. (Thanks!!)
-   - Added patch that fixed "SMB Server connection not open in 
-     state 3" error with Apache2/mp2. (Big thanks to Dr. Russell Mosemann!)
+0.3  Sun Aug  2 13:58:00 1998
+	- Removed the object files that accidentally got left in smbval/
 
-2.08  04.  Oct 2004
-   - Applied patch from Chris Hughes, which changes the modification
-     of $conn -> remote_host(), (which became read-only in 
-     mod_perl-1.99_15).
+0.4  Thu Mar  4 16:20:00 1999
+	- Fixed the versioning in Smb.pm so that CPAN clients will download
+          the correct version.
 
-2.07  07.  May 2004
-   - Fixed a lazy finger mistake on Line 136 :P
-     (Thanks Daniel Roegelein!)
+0.5  Thu Mar 11 19:45:00 1999
+	- Finally added Lupe Christoph's <lupe@alanya.m.isar.de> patches to
+          make builds less of a hassle.  .Fixed the versioning in Smb.pm so
+          that CPAN clients will download the correct version.  Thanks Lupe!
+	- Updated the MANIFEST
 
-2.06  16.  Feb 2004
-   - Added code to remove DOMAIN\\ from windows XP/2003 logins 
-     (patch by Michael Zehrer)
-   - Added instructions put forth by Darryl Miles about windows smb
-     server not accepting ip address, only domain name
+0.6  Thu Mar 11 20:00:00 1999
+	- Updated the MANIFEST correctly. :-)
+	
+0.7  Mon Apr 19 19:22:13 1999
+        - Resolved some segfault problems on various platforms by reducing
+          the optimization during the smbval compile.
+	  
+0.8  Mon Apr 19 19:37:13 1999
+        - Shot another smbval bug.
 
-2.05  22.  Jan 2004
-   - fixed misspelling of ntlmsemtimeout in help section
-   - fixed deprecated method APR::SockAddr::port_get with
-     APR::SockAddr::port for MP2.  Now requires MP2 version
-     >= 1.99_12
+0.81  Sun Jun  6 10:2:09 1999
+	- Updated to the latest smbval library, hopefully resolving some
+	  segfaults and authentication problems for usernames and passwords
+	  with weird characters in them.
+	- Cleaned up Smb.xs
+	- Unreleased version
 
-2.04  25. Jul 2003
-   - beautified the handler code with Stas Beckman's fix in docs
+0.9  Sun Jun  6 18:50:23 1999
+	- While toying around with smbval, discovered some buffer overflows
+	  in the library.  Worked around them in the perl portion of the
+	  module for now, but will get in touch with author to try and
+	  merge some patches to resolve the overflows in the library itself.
+	  Because of these overflows, it is _critical_ that anyone using
+	  Authen::Smb, including those using Apache::AuthenSmb, upgrade to
+	  0.9.  I have not spent a lot of time investigating the overflows,
+	  but I believe them to be exploitable.
 
-2.03  24. Jul 2003
-   - removed port debugging line that was causing irritation
-   - fixed apt misspelling of Microsoft
+0.91 Mon Jun  7 08:03:47 1999
+	- Fixed a ridiculous thinko in Smb.pm (thansk Daniel Myers)
 
-2.02  23. Jul 2003
-   - removed r->log line that was killing the handler
 
-2.01  22. Jul 2003
-   
-   - Ported to work with both versions of modperl
-   - Cleaned up the Documentation a bit
-   - Fixed broken URLs in README
- 
-0.23  12. Nov 2002
+0.92 Jan 4 2002
+    - Added functions for Apache::AuthenNTLM (Gerald Richter)
 
-   - Fixed possible lockup with POST data. Patch from Gerald Combs.
-
-0.22  11. Nov 2002
-
-   - Return FORBIDDEN (instead of SERVER_ERROR) when no PDC is 
-     configured for a given domain
-   - Compiles now correctly with Perl 5.005
-   - Fixed problem with POST data, based on a patch from Gerald Combs.
-
-0.21  03. Sept 2002
-
-   - Fixed bug that had cut nonce on null byte, which cause
-     smb auth to fail randomly
-
-0.20  27. Aug 2002
-   
-   - Directly close connection to smb server after validation 
-
-0.19  26. Aug 2002
-
-   - Fixed in smbval c library to allow multiple connections at the same
-     time (i.e. set VcNumber to 1 instead of 0)
-   - Rewored serialziation code. It now makes sure that the whole
-     request to the smb server is serialzied.
-   - Added semtimeout directive to avoid endless locks.
-   - Debug messages cleanup. Now can set ntlmdebug to 1 or 2 to
-     get less/more verbose infomations.
-
-0.18  23. Aug 2002
-
-   - Update smbval library
-   - Fixed problem with guest access. Before 0.18 smbval lib would
-     logon any user if the domain contains a guest account.
-     Patch from Eric Devolder.
-   - Fixed problem that smbval lib cannot handle two requests at
-     the same time. I don't know if this is a general problem
-     of the smb protocol, but after doing a lot of research
-     the only solution I found is to serialzie all requests
-     to the server. See also PerlSetVar ntlmsemkey.
-   - Added fallbackdomain which is used when the domain the user
-     supplied is not configured. Patch from David B. Pasirstein.
-   - Fixed missing headers for Basic Auth. Patch from  David B. Pasirstein.
-   - Make username always lowercase in connection record, to avoid
-     problems when comparing user name (e.g. in q require directive)
-
-0.17  19. Apr 2002
-
-   - fix bug with ntlmauthoritative off
-   - fix compile problem on FreeBSD reported by Ryan Parr.
-
-0.16  14. Apr 2002
-
-   - Return DECLINE to pass request to next authentication handler
-     in case ntlmauthoritative is not set and a communication error
-     with the Domain Controller has occured.
-   - Return DECLINE to pass request to next authentication handler
-     in case ntlmauthoritative is not set and we have credentials
-     for another authorization method given from the browser.
-   - Log the connection header in debug mode to see if it's a keep
-     alive request.
-
- 0.15  9. Apr 2002
-
-   - Added patch from Brian Paulsen which causes correct handling of
-     non unicode charset (needed for some versions of win9x) and
-     more verbose debugging output (decoded flags)
-
- 0.14  26. Feb 2002
-
-   - fixed a problem that page content of Perl sometimes goes to the
-     stderr instead of stdout
-
- 0.13  9. Jan 2002
-
-    - return mapped username, when second request on same connection, 
-      instead of unmapped
-
- 0.12  8. Jan 2002 
-
-    - fix broken Authen::Smb::authen function in Authen::Smb 0.92 that
-      ships with Apache::AuthenNTLM
-
- 0.11  8. Jan 2002
-
-    - Initial public release
-
+0.93-0.96 Seg 3 2002
+    - updated smbval, fixed bugs in smbval VC count handling,
+      fixed bug in nonce passing

@@ -1,3 +1,7 @@
+
+0.02 28. Apr 2005
+   - repackaging on true Debian system as test for incorrect setting of $INST_LIB on colinux
+
 0.01 27. Apr 2005
    - Split from the parent Apache::AuthenNTLM
    - Moved to the Apache2::AuthenNTLM namespace
